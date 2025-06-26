@@ -13,6 +13,6 @@ export class ZodValidationPipe implements PipeTransform {
       throw new BadRequestException(`Validación fallida: ${formatted}`);
     }
 
-    return result.data; // Devuelve el objeto validado y tipado
+    return result.data; 
   }
 }
