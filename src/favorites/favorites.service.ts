@@ -36,7 +36,26 @@ export class FavoritesService {
     return await this.favoriteModel.find({ userId });
   }
 
-    async removeFavorite(userId: string, imdbID: string) {
-        return await this.favoriteModel.findOneAndDelete({ userId, imdbID });
+  async removeFavorite(userId: string, imdbID: string) {
+      return await this.favoriteModel.findOneAndDelete({ userId, imdbID });
+  }
+
+  async rateFavorite(
+    userId: string,
+    imdbID: string,
+    rating: number,
+    comment?: string,
+  ) {
+    const updated = await this.favoriteModel.findOneAndUpdate(
+      { userId, imdbID },
+      { rating, comment },
+      { new: true },
+    );
+
+    if (!updated) {
+      throw new NotFoundException('Favorito no encontrado para calificar.');
     }
+
+    return updated;
+  }
 }

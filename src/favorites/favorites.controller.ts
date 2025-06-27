@@ -14,6 +14,7 @@ import { FavoritesService } from './favorites.service';
 import { JwtAuthGuard } from '../guards/jwt-auth.guard';
 import { ZodValidationPipe } from '../common/pipes/zod-validation.pipe';
 import { AddFavoriteSchema } from './dto/add-favorite.schema';
+import { RateFavoriteSchema } from './dto/rate-favorite.schema';
 
 @Controller('favorites')
 export class FavoritesController {
@@ -43,5 +44,20 @@ export class FavoritesController {
       throw new NotFoundException('No se encontró el favorito a eliminar.');
     }
     return { message: 'Favorito eliminado correctamente' };
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Post('rate')
+  async rateFavorite(
+    @Request() req: any,
+    @Body(new ZodValidationPipe(RateFavoriteSchema)) body,
+  ) {
+    const { imdbID, rating, comment } = body;
+    return this.favoritesService.rateFavorite(
+      req.user.userId,
+      imdbID,
+      rating,
+      comment,
+    );
   }
 }

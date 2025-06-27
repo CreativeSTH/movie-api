@@ -1,9 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
 
-export type FavoriteDocument = Favorite & Document;
-
-@Schema({ timestamps: true })
+@Schema()
 export class Favorite {
   @Prop({ required: true })
   userId: string;
@@ -19,6 +17,14 @@ export class Favorite {
 
   @Prop()
   poster: string;
+
+  // añado calificación opcional
+  @Prop({ min: 1, max: 10, required: false })
+  rating?: number;
+
+  @Prop({ required: false })
+  comment?: string;
 }
 
+export type FavoriteDocument = Favorite & Document;
 export const FavoriteSchema = SchemaFactory.createForClass(Favorite);
