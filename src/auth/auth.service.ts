@@ -24,16 +24,13 @@ export class AuthService {
   async register(createUserDto: CreateUserDto): Promise<User> {
     const { email, name, password } = createUserDto;
 
-    // ✅ Verifica si el usuario ya existe
     const existingUser = await this.userModel.findOne({ email });
     if (existingUser) {
       throw new Error('El usuario ya existe');
     }
 
-    // 🔒 Hashea la contraseña
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // 🧑‍💻 Crea el usuario
     const newUser = new this.userModel({
       email,
       name,
@@ -43,7 +40,6 @@ export class AuthService {
 
     const savedUser = await newUser.save();
 
-    // 🔐 Crea token de verificación
     const token = uuidv4();
     const expiresAt = addHours(new Date(), 24); // Válido por 24 horas
 
@@ -53,7 +49,6 @@ export class AuthService {
       expiresAt,
     });
 
-    // 📧 Envía email de verificación
     await this.emailSender.sendMail(
       savedUser.email,
       'Verifica tu cuenta',
@@ -74,12 +69,10 @@ export class AuthService {
       throw new BadRequestException('Token expirado.');
     }
 
-    // Marca al usuario como verificado
     await this.userModel.findByIdAndUpdate(tokenRecord.userId, {
       isVerified: true,
     });
 
-    // Elimina el token
     await this.tokenModel.deleteOne({ _id: tokenRecord._id });
 
     return 'Tu cuenta ha sido verificada exitosamente.';
@@ -96,7 +89,6 @@ export class AuthService {
       throw new BadRequestException('Este correo ya fue verificado');
     }
 
-    // Borrar tokens previos
     await this.tokenModel.deleteMany({ userId: user._id });
 
     const token = uuidv4();

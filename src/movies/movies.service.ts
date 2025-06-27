@@ -24,7 +24,7 @@ export class MoviesService {
       if (response.data.Response === 'False') {
         throw new HttpException(response.data.Error, 404);
       }
-      return response.data.Search; // array de películas
+      return response.data.Search;
     } catch (err) {
       throw new HttpException('Error buscando películas', 500);
     }
@@ -66,4 +66,20 @@ export class MoviesService {
 
     return results.slice(0, limit);
   }
+
+  async getMovieById(imdbID: string): Promise<any> {
+  try {
+    const url = `${this.omdbUrl}?apikey=${this.omdbApiKey}&i=${imdbID}`;
+    const response = await firstValueFrom(this.httpService.get(url));
+
+    if (response.data?.Response === 'False') {
+      return null;
+    }
+
+    return response.data;
+  } catch (error) {
+    throw new HttpException('Error obteniendo película por ID', 500);
+  }
+}
+
 }
