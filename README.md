@@ -1,98 +1,196 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# 🎬 Movie API - Prueba Técnica NestJS + MongoDB
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+API RESTful desarrollada con **NestJS** y **MongoDB** que permite a los usuarios registrarse, iniciar sesión, buscar películas/series usando la API de OMDb, guardar favoritos y calificarlos. Incluye autenticación JWT, validaciones con Zod y estructura modular.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+---
 
-## Description
+## 🚀 Tecnologías Utilizadas
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+- **NestJS** (Framework Backend)
+- **MongoDB Atlas** (Base de datos NoSQL)
+- **Mongoose** (ODM)
+- **Zod** (Validaciones de DTOs)
+- **JWT** (Autenticación segura)
+- **OMDb API** (Base de datos de películas y series)
+- **Nodemailer** (Verificación por email)
+- **Postman** (Pruebas manuales)
 
-## Project setup
+---
+
+## 📦 Instalación
+
+1. Clona el repositorio:
 
 ```bash
-$ npm install
+git clone https://github.com/tu-usuario/movie-api.git
+cd movie-api
 ```
 
-## Compile and run the project
+2. Instala las dependencias:
 
 ```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
+npm install
 ```
 
-## Run tests
+3. Crea un archivo `.env` en la raíz del proyecto con el siguiente contenido:
+
+```env
+MONGODB_URI=mongodb+srv://demo:demo123@demo.mongodb.net/?retryWrites=true&w=majority
+JWT_SECRET=superSecretKey123
+JWT_EXPIRES_IN=3600s
+OMDB_API_KEY=tu_clave_omdb
+OMDB_BASE_URL=https://www.omdbapi.com/
+
+EMAIL_FROM=demo.email@gmail.com
+EMAIL_PASSWORD=demoappkey1234
+EMAIL_SERVICE=gmail
+FRONTEND_URL=http://localhost:4200
+```
+
+4. Ejecuta el proyecto:
 
 ```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
+npm run start:dev
 ```
 
-## Deployment
+---
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
+## 📚 Endpoints Documentados
 
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+> 🔐 Los endpoints protegidos requieren autenticación vía Bearer Token.
 
-```bash
-$ npm install -g @nestjs/mau
-$ mau deploy
+---
+
+### 🧑‍💻 Autenticación
+
+#### `POST /auth/register`  
+**Registrar nuevo usuario**  
+_No requiere token_
+
+```json
+{
+  "name": "Sebastián Torres",
+  "email": "demo@gmail.com",
+  "password": "SuperPassword123"
+}
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+#### `GET /auth/verify-email?token=UUID`  
+**Verificar email**  
+_No requiere token_
 
-## Resources
+#### `POST /auth/resend-verification`  
+**Reenviar correo de verificación**  
+_No requiere token_
 
-Check out a few resources that may come in handy when working with NestJS:
+```json
+{
+  "email": "demo@gmail.com"
+}
+```
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+#### `POST /auth/login`  
+**Iniciar sesión**  
+_No requiere token_
 
-## Support
+```json
+{
+  "email": "demo@gmail.com",
+  "password": "SuperPassword123"
+}
+```
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+#### `POST /auth/logout`  
+**Cerrar sesión**  
+_Requiere token_
 
-## Stay in touch
+---
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+### 🎞️ Películas y Series
 
-## License
+#### `GET /movies/search?title=Matrix`  
+**Buscar películas por título**  
+_Requiere token_
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+#### `GET /movies/year-movies`  
+**Obtener películas y series del año 2025 (aleatorias)**  
+_Requiere token_
+
+---
+
+### ⭐ Favoritos
+
+#### `POST /favorites`  
+**Agregar película/serie a favoritos**  
+_Requiere token_
+
+```json
+{
+  "imdbID": "tt9150192"
+}
+```
+
+#### `GET /favorites`  
+**Listar favoritos del usuario autenticado**  
+_Requiere token_
+
+#### `DELETE /favorites/:imdbID`  
+**Eliminar un favorito por ID**  
+_Requiere token_
+
+`DELETE /favorites/tt9150192`
+
+---
+
+### 📝 Calificaciones
+
+#### `POST /favorites/rate`  
+**Calificar una película/serie favorita**  
+_Requiere token_
+
+```json
+{
+  "imdbID": "tt9150192",
+  "rating": 9,
+  "comment": "¡Muy buena película!"
+}
+```
+
+---
+
+## 🧪 Testing con Postman
+
+Puedes usar [Postman](https://www.postman.com/) para probar cada endpoint. Asegúrate de:
+
+- Iniciar sesión para obtener el Bearer Token.
+- Usar el token en la pestaña **Authorization** de tipo `Bearer Token`.
+- Reemplazar valores como `imdbID` con datos válidos desde OMDb.
+
+---
+
+## ✅ Buenas Prácticas Implementadas
+
+- ✅ DTOs validados con **Zod** y pipe personalizado.
+- ✅ Modularización clara (`auth`, `movies`, `favorites`).
+- ✅ Manejo de errores consistente con `HttpException`.
+- ✅ Autenticación segura con JWT.
+- ✅ Verificación de email antes de permitir acceso.
+- ✅ Limpieza de favoritos duplicados.
+- ✅ Documentación completa y código limpio.
+
+---
+
+## 🛡️ Seguridad y Restricciones
+
+- Usuarios no pueden acceder a recursos sin validar su correo.
+- Usuarios solo pueden ver, calificar y eliminar **sus propios** favoritos.
+- No se permite agregar un favorito más de una vez.
+- Validación estricta de inputs con Zod.
+- Passwords hasheadas con bcrypt.
+
+---
+
+## ✉️ Contacto
+
+Desarrollado por: **Sebastián Torres**  
+Correo: [sth.frontend@gmail.com](mailto:sth.frontend@gmail.com)
